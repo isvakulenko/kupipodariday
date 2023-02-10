@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException  } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -21,17 +22,17 @@ export class AuthService {
   // метод validatePassword проверяет,
   //  совпадает ли пароль пользователя с тем, что есть в базе.
   async validatePassword(username: string, password: string) {
-    console.log(username, password)
     const user = await this.usersService.findByUsername(username); 
-    console.log('user', user)
     /* В идеальном случае пароль обязательно должен быть захэширован */
-    if (user && user.password === password) {
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+      throw new UnauthorizedException('Неверное имя пользователя или пароль')
+    }
+    if (user && passwordCompare) {
       /* Исключаем пароль из результата */
       const { password, ...result } = user;
-
       return result;
     }
-
     return null;
   }
 
