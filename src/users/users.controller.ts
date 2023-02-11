@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { FindUserDto } from './dto/find-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from 'src/auth/jwt.guard';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -23,6 +24,7 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
+
   //для просмотра своего профиля
   @Get('me')
   async findOwnOne(@Req() req) {
@@ -48,4 +50,18 @@ export class UsersController {
     const user = await this.usersService.findMany(findUser);
     return user;
   }
+
+  //Все подарки, созданные текущим пользователем
+  @Get('me/wishes')
+  async getOwnUserWishes(@Req() req ): Promise<Wish[]> {
+    return await this.usersService.getOwnUserWishes(req.user.id);
+  }
+
+  //подарки, созданные другими пользователями
+   @Get(':username/wishes')
+  async getUsersWishes(@Param('username') username: string): Promise<Wish[]> {
+    const user = await this.usersService.findByUserName(username);
+   return await this.usersService.getOwnUserWishes(user.id);    
+   }
+
 }

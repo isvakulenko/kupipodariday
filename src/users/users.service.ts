@@ -6,12 +6,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 import * as bcrypt from 'bcrypt';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Wish)
+    private readonly wishRepository: Repository<Wish>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -40,8 +43,8 @@ export class UsersService {
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.update({ id }, updateUserDto);
     return user;
-
   }
+
   async findMany({ query }: FindUserDto): Promise<User[]> {
       const users = await this.userRepository.find({
         where: [{ email: query }, { username: query }],
@@ -50,6 +53,15 @@ export class UsersService {
         throw new NotFoundException(' Пользователь не найден...');
       }
       return users;
+    }
+
+    async getOwnUserWishes(id: number) {
+     const wishes = await this.wishRepository.find({
+        where: { owner: {id} },
+        relations: ['owner']
+      });
+
+      return wishes
     }
 
 }
