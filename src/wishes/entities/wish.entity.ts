@@ -64,11 +64,12 @@ export class Wish {
   @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
 
-  //copied — содержит cчётчик тех, кто скопировал подарок себе.
+  //copied — содержит cчётчик сколько раз был скопирован подарок.
   @Column({ default: 0 })
   @IsInt()
   copied: number;
 
+  //items - содержит набор ссылок на подарки.
   @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
   items: Wishlist;
 }

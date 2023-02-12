@@ -14,7 +14,10 @@ export class UpdateWishDto extends PartialType(CreateWishDto) {
 
   @IsInt()
   price?: number;
-  
+
   @Length(1, 1024)
   description?: string;
+
+  @IsInt()
+  raised?: number;
 }
