@@ -18,45 +18,57 @@ import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 export class Wish {
   @PrimaryGeneratedColumn()
   id: number;
+
   @CreateDateColumn()
   createdAt: Date;
+
   @UpdateDateColumn()
   updatedAt: Date;
+
   //name — название подарка.
   @Column()
   @Length(1, 250)
   name: string;
+
   //link — ссылка на интернет-магазин, в котором можно приобрести подарок
   @Column()
   @IsUrl()
   link: string;
+
   //image - ссылка на изображение подарка, строка.
   @Column()
   @IsUrl()
   image: string;
+
   //price — стоимость подарка, с округлением до сотых.
   @Column()
   @IsInt()
   price: number;
+
   //raised — сумма предварительного сбора или сумма,
   // которую пользователи сейчас готовы скинуть на подарок.
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
   raised: number;
+
   //owner — ссылка на пользователя, который добавил пожелание подарка.
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
+
   //description — строка с описанием подарка длиной от 1 и до 1024 символов.
   @Column()
   @Length(1, 1024)
   description: string;
+
   //offers — массив ссылок на заявки скинуться от других пользователей.
   @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
+
   //copied — содержит cчётчик тех, кто скопировал подарок себе.
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
   copied: number;
+
   @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
   items: Wishlist;
 }
