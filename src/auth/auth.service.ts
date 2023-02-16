@@ -22,7 +22,7 @@ export class AuthService {
   // метод validatePassword проверяет,
   //  совпадает ли пароль пользователя с тем, что есть в базе.
   async validatePassword(username: string, password: string) {
-    const user = await this.usersService.findByUsername(username); 
+    const user = await this.usersService.findByUserName(username); 
     /* В идеальном случае пароль обязательно должен быть захэширован */
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
