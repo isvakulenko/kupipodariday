@@ -7,23 +7,20 @@ import {
   Req,
   Param,
   UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { FindUserDto } from './dto/find-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { Wish } from 'src/wishes/entities/wish.entity';
+import { UserPasswordInterceptor } from 'src/interceptors/user-password.interceptor';
 
+@UseInterceptors(UserPasswordInterceptor)
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  //список всех профилей
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
 
   //для просмотра своего профиля
   @Get('me')
