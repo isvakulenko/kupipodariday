@@ -59,6 +59,10 @@ export class WishesService {
     return wish;
   }
 
+  async find(arg: any) {
+    return await this.wishRepository.find(arg)
+  }
+
   async updateOne(wishId: number, UpdatedWish: UpdateWishDto, userId: number) {
     const wish = await this.findOne(wishId);
 

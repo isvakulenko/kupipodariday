@@ -14,8 +14,8 @@ import { User } from 'src/users/entities/user.entity';
 export class OffersService {
   constructor(
     @InjectRepository(Offer)
-    private offerRepository: Repository<Offer>,
-    private WishesService: WishesService,
+    private readonly  offerRepository: Repository<Offer>,
+    private readonly  WishesService: WishesService,
   ) {}
   async create(user: User, createOfferDto: CreateOfferDto) {
     //найдем в базе подарок, на который будем скидываться

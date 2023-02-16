@@ -6,12 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
-  ManyToMany,
 } from 'typeorm';
 import { IsInt, Length, IsUrl } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
-import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 
 //Схема для подарков (wish):
 @Entity()
@@ -68,8 +66,4 @@ export class Wish {
   @Column({ default: 0 })
   @IsInt()
   copied: number;
-
-  //items - содержит набор ссылок на подарки.
-  @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
-  items: Wishlist;
 }

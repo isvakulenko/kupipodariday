@@ -15,12 +15,12 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 @Controller('offers')
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
-
+  //создадим предложение скинуться - offer
   @Post()
   async create(@Req() req, @Body() createOfferDto: CreateOfferDto) {
     return await this.offersService.create(req.user, createOfferDto);
   }
-
+  // найдем все предложения
   @Get()
   async findAll() {
     return await this.offersService.findAll();
