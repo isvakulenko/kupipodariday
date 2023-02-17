@@ -10,7 +10,4 @@ export class CreateWishlistDto {
   @IsArray()
   @IsNumber({}, { each: true })
   itemsId?: number[];
-
-  @Length(0, 1500)
-  description?: string;
 }
