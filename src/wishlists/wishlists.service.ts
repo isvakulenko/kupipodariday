@@ -42,14 +42,14 @@ console.log(wishes)
   async update(user: User, wishlistId: number, updateWishlistDto: UpdateWishlistDto) {
     
     const wishlist = await this.findOne(wishlistId);
-    //console.log("wishlist", wishlist)
-    // if (!wishlist) {
-    //   throw new NotFoundException('Такого списка нет');
-    // }
+    console.log("wishlist", wishlist)
+    if (!wishlist) {
+      throw new NotFoundException('Такого списка нет');
+    }
 
-    // if (user.id !== wishlist.owner.id) {
-    //   throw new ForbiddenException('Нельзя редактировать чужие списки');
-    // }
+    if (user.id !== wishlist.owner.id) {
+      throw new ForbiddenException('Нельзя редактировать чужие списки');
+    }
     //соберем все подарки в одном массиве, в соответствии с их id
     const wishes = await this.wishesService.find({
       where: { id: In(updateWishlistDto.itemsId )},
