@@ -41,8 +41,15 @@ export class UsersService {
   }
 
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.update({ id }, updateUserDto);
+    //Измененнный пароль надо захешировать
+    const { password } = updateUserDto;
+    const hash = await bcrypt.hash(password, 10)
+    if (password) {
+    const user = await this.userRepository.update( id , {...updateUserDto, password: hash});
     return user;
+  } else {
+    return await this.userRepository.update( id, updateUserDto);
+  }
   }
 
   async findMany({ query }: FindUserDto): Promise<User[]> {

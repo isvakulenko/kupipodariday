@@ -32,8 +32,7 @@ export class UsersController {
   //для обновления своего профиля
   @Patch('me')
   async updateOne(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-    await this.usersService.updateOne(req.user.id, updateUserDto);
-    return this.usersService.findOne(req.user.id);
+    return await this.usersService.updateOne(req.user.id, updateUserDto);
   }
   //поиск в базе по имени пользователя
   @Get(':username')
