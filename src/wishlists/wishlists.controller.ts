@@ -1,34 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  UseInterceptors
+} from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { JwtGuard } from 'src/auth/jwt.guard';
+import { OwnerPasswordInterceptor } from 'src/interceptors/owner-password.interceptor';
 
-
+@UseInterceptors(OwnerPasswordInterceptor)
 @UseGuards(JwtGuard)
 @Controller('wishlistlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
-//создать список подарков
+  //создать список подарков
   @Post()
   async create(@Req() req, @Body() createWishlistDto: CreateWishlistDto) {
- const wishlist = await this.wishlistsService.create(req.user, createWishlistDto);
-    return wishlist
+    const wishlist = await this.wishlistsService.create(
+      req.user,
+      createWishlistDto,
+    );
+    return wishlist;
   }
-// найти все списки подарков
+  // найти все списки подарков
   @Get()
   async findAll() {
-    return this.wishlistsService.findAll()
+    return this.wishlistsService.findAll();
   }
-// найти определенный список подарков
+  // найти определенный список подарков
   @Get(':id')
- async findOne(@Param('id') id: string) {
-  return this.wishlistsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.wishlistsService.findOne(+id);
   }
-// редактировать определенный список подарков
+  // редактировать определенный список подарков
   @Patch(':id')
-  update(@Req() req, @Param('id') wishlistId: string, @Body() updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistsService.update(req.user, +wishlistId, updateWishlistDto);
+  update(
+    @Req() req,
+    @Param('id') wishlistId: string,
+    @Body() updateWishlistDto: UpdateWishlistDto,
+  ) {
+    return this.wishlistsService.update(
+      req.user,
+      +wishlistId,
+      updateWishlistDto,
+    );
   }
 
   @Delete(':id')

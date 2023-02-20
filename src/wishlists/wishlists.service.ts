@@ -16,11 +16,9 @@ export class WishlistsService {
   ) {}
   async create(user:User, createWishlistDto: CreateWishlistDto) {
 //соберем все подарки в одном массиве, в соответствии с их id
-console.log(createWishlistDto.itemsId, user)
     const wishes= await this.wishesService.find({
       where: { id: In(createWishlistDto.itemsId) },
     });
-console.log(wishes)
     //запишем новый wishlist в БД
     return  await this.wishlistsRepository.save({ ...createWishlistDto, items: wishes, owner: user, });
 
@@ -42,7 +40,6 @@ console.log(wishes)
   async update(user: User, wishlistId: number, updateWishlistDto: UpdateWishlistDto) {
     
     const wishlist = await this.findOne(wishlistId);
-    console.log("wishlist", wishlist)
     if (!wishlist) {
       throw new NotFoundException('Такого списка нет');
     }
@@ -54,7 +51,6 @@ console.log(wishes)
     const wishes = await this.wishesService.find({
       where: { id: In(updateWishlistDto.itemsId )},
     });
-    console.log("wishes",  wishes)
     return await this.wishlistsRepository.save({
       ...wishlist,
       name: updateWishlistDto.name,
